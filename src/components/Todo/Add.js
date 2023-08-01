@@ -41,31 +41,31 @@ function AddTodo(props) {
   return (
     <div>
       <Backdrop onClose={props.onClose} />
-      <div className="modal add-todo-modal">
-        <div className="flex flex-align-center">
-          <div className="label font-size-20">title:</div>
+      <div className='modal add-todo-modal'>
+        <div className='flex flex-align-center'>
+          <div className='label font-size-20'>title:</div>
           <input
-            className="font-size-20"
-            type="text"
+            className='font-size-20'
+            type='text'
             ref={inputTitleRef}
             value={title}
             onInput={onTitleInput}
           />
         </div>
-        <div className="flex flex-align-center m-t-10">
-          <div className="label font-size-20">content:</div>
+        <div className='flex flex-align-center m-t-10'>
+          <div className='label font-size-20'>content:</div>
           <input
-            className="font-size-20"
-            type="text"
+            className='font-size-20'
+            type='text'
             value={content}
             onInput={onContentInput}
           />
         </div>
         {errorText && (
-          <div className="m-t-10 error-text">error: {errorText}</div>
+          <div className='m-t-10 error-text'>error: {errorText}</div>
         )}
-        <div className="modal-actions flex flex-justify-center">
-          <button className="btn btn-primary" onClick={addTodo}>
+        <div className='modal-actions flex flex-justify-center'>
+          <button className='btn btn-primary' onClick={addTodo}>
             Add
           </button>
         </div>

@@ -58,23 +58,23 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <div className="flex flex-justify-between flex-align-center">
-        <div className="flex flex-align-center">
-          <img src="/logo192.png" alt="logo" width="40" height="40" />
-          <h1 className="m-l-10">My Todos</h1>
+    <div className='app'>
+      <div className='flex flex-justify-between flex-align-center'>
+        <div className='flex flex-align-center'>
+          <img src='/logo.png' alt='logo' width='40' height='40' />
+          <h1 className='m-l-10'>My Todos</h1>
         </div>
-        <div className="flex flex-align-center">
+        <div className='flex flex-align-center'>
           <button
             onClick={() => setShowAddTodo(true)}
-            className="btn btn-success"
+            className='btn btn-success'
           >
             Add
           </button>
-          <button onClick={onDeleteChecked} className="btn btn-warning m-l-10">
+          <button onClick={onDeleteChecked} className='btn btn-warning m-l-10'>
             Delete Checked
           </button>
-          <button onClick={onDeleteAll} className="btn btn-danger m-l-10">
+          <button onClick={onDeleteAll} className='btn btn-danger m-l-10'>
             Delete All
           </button>
         </div>

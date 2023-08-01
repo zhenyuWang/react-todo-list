@@ -28,23 +28,27 @@ function Todo(props) {
       onClick={() => props.onChangeActive && props.onChangeActive(props.id)}
     >
       <div>
-        <div className="flex">
+        <div className='flex'>
           <input
-            className="checkbox"
-            type="checkbox"
+            className='checkbox'
+            type='checkbox'
             onClick={(e) => e.stopPropagation()}
             onChange={onChangeCompleted}
             checked={props.completed}
           />
-          <h2 className="title">{props.title}</h2>
+          <h2 className='title'>{props.title}</h2>
         </div>
-        <div>{props.active && <p className="content">{props.content}</p>}</div>
+        <div>{props.active && <p className='content'>{props.content}</p>}</div>
       </div>
-      <button className="btn btn-warning delete" onClick={showModalHandler}>
+      <button className='btn btn-warning delete' onClick={showModalHandler}>
         delete
       </button>
       {showModal && (
-        <Modal onCancel={() => setShowModal(false)} onConfirm={onDeleteTodo} />
+        <Modal
+          onCancel={() => setShowModal(false)}
+          onConfirm={onDeleteTodo}
+          msg='Are you sure you want to delete?'
+        />
       )}
       {showModal && <Backdrop onClose={() => setShowModal(false)} />}
     </div>
