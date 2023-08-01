@@ -1,11 +1,11 @@
-.add-todo-modal input{
+.add-todo-content input {
   width: 260px;
 }
 
-.label{
+.label {
   min-width: 80px;
 }
 
-.error-text{
+.error-text {
   color: red;
 }

@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
-import Backdrop from '../Backdrop'
 
 function TodoList() {
   const [todoList, setTodoList] = useState([])
@@ -56,7 +55,7 @@ function TodoList() {
     setTodoList([...currentTodoList])
     setDeleteCheckedModal(false)
   }
-  
+
   function onDeleteAll() {
     currentTodoList = []
     setTodoList([...currentTodoList])
@@ -64,23 +63,29 @@ function TodoList() {
   }
 
   return (
-    <div className='app'>
-      <div className='flex flex-justify-between flex-align-center'>
-        <div className='flex flex-align-center'>
-          <img src='/logo.png' alt='logo' width='40' height='40' />
-          <h1 className='m-l-10'>My Todos</h1>
+    <div className="app">
+      <div className="flex flex-justify-between flex-align-center">
+        <div className="flex flex-align-center">
+          <img src="/logo.png" alt="logo" width="40" height="40" />
+          <h1 className="m-l-10">My Todos</h1>
         </div>
-        <div className='flex flex-align-center'>
+        <div className="flex flex-align-center">
           <button
             onClick={() => setShowAddTodo(true)}
-            className='btn btn-success'
+            className="btn btn-success"
           >
             Add
           </button>
-          <button onClick={() => setDeleteCheckedModal(true)} className='btn btn-warning m-l-10'>
+          <button
+            onClick={() => setDeleteCheckedModal(true)}
+            className="btn btn-warning m-l-10"
+          >
             Delete Checked
           </button>
-          <button onClick={() => setDeleteAllModal(true)} className='btn btn-danger m-l-10'>
+          <button
+            onClick={() => setDeleteAllModal(true)}
+            className="btn btn-danger m-l-10"
+          >
             Delete All
           </button>
         </div>
@@ -103,18 +108,16 @@ function TodoList() {
         <Modal
           onCancel={() => setDeleteCheckedModal(false)}
           onConfirm={onDeleteChecked}
-          msg='Are you sure you want to delete checked?'
+          msg="Are you sure you want to delete checked?"
         />
       )}
-      {showDeleteCheckedModal && <Backdrop onClose={() => setDeleteCheckedModal(false)} />}
       {showDeleteAllModal && (
         <Modal
           onCancel={() => setDeleteAllModal(false)}
           onConfirm={onDeleteAll}
-          msg='Are you sure you want to delete all?'
-        />
+          msg="Are you sure you want to delete all?"
+        ></Modal>
       )}
-      {showDeleteAllModal && <Backdrop onClose={() => setDeleteAllModal(false)} />}
     </div>
   )
 }
