@@ -1,0 +1,23 @@
+.todo {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  box-shadow: 0 0 10px rgba(90, 90, 90, 0.5);
+}
+.todo.completed .title,
+.todo.completed .content {
+  text-decoration: line-through;
+}
+
+.content {
+  margin: 0;
+  padding-left: 32px;
+}
+
+.checkbox {
+  margin-right: 15px;
+}
+
+.delete {
+  margin-left: 10px;
+  margin-top: 18px;
+}
