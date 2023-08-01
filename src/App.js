@@ -1,11 +1,15 @@
 import { useState, useMemo } from 'react'
 import Todo from './components/Todo'
 import AddTodo from './components/Todo/Add'
+import Modal from './components/Modal'
+import Backdrop from './components/Backdrop'
 
 function App() {
   const [todoList, setTodoList] = useState([])
   let currentTodoList = useMemo(() => [...todoList], [todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
+  const [showDeleteCheckedModal, setDeleteCheckedModal] = useState(false)
+  const [showDeleteAllModal, setDeleteAllModal] = useState(false)
 
   function onChangeCompleted(id, value) {
     for (let i = 0; i < currentTodoList.length; i++) {
@@ -50,11 +54,13 @@ function App() {
   function onDeleteChecked() {
     currentTodoList = currentTodoList.filter((todo) => !todo.completed)
     setTodoList([...currentTodoList])
+    setDeleteCheckedModal(false)
   }
-
+  
   function onDeleteAll() {
     currentTodoList = []
     setTodoList([...currentTodoList])
+    setDeleteAllModal(false)
   }
 
   return (
@@ -71,10 +77,10 @@ function App() {
           >
             Add
           </button>
-          <button onClick={onDeleteChecked} className='btn btn-warning m-l-10'>
+          <button onClick={() => setDeleteCheckedModal(true)} className='btn btn-warning m-l-10'>
             Delete Checked
           </button>
-          <button onClick={onDeleteAll} className='btn btn-danger m-l-10'>
+          <button onClick={() => setDeleteAllModal(true)} className='btn btn-danger m-l-10'>
             Delete All
           </button>
         </div>
@@ -92,6 +98,23 @@ function App() {
       {isShowAddTodo && (
         <AddTodo onAddTodo={onAddTodo} onClose={() => setShowAddTodo(false)} />
       )}
+
+      {showDeleteCheckedModal && (
+        <Modal
+          onCancel={() => setDeleteCheckedModal(false)}
+          onConfirm={onDeleteChecked}
+          msg='Are you sure you want to delete checked?'
+        />
+      )}
+      {showDeleteCheckedModal && <Backdrop onClose={() => setDeleteCheckedModal(false)} />}
+      {showDeleteAllModal && (
+        <Modal
+          onCancel={() => setDeleteAllModal(false)}
+          onConfirm={onDeleteAll}
+          msg='Are you sure you want to delete all?'
+        />
+      )}
+      {showDeleteAllModal && <Backdrop onClose={() => setDeleteAllModal(false)} />}
     </div>
   )
 }
