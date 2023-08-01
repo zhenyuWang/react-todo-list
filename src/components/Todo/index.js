@@ -5,16 +5,14 @@ import Modal from '../Modal'
 function Todo(props) {
   const [showModal, setShowModal] = useState(false)
 
-  function onChangeCompleted(e) {
-    props.onChangeCompleted &&
-      props.onChangeCompleted(props.id, e.target.checked)
+  function onChangeFinished(e) {
+    props.onChangeFinished && props.onChangeFinished(props.id, e.target.checked)
   }
   function onDeleteTodo() {
     setShowModal(false)
     props.onDeleteTodo && props.onDeleteTodo(props.id)
   }
   function showModalHandler(e) {
-    console.log(111)
     e.stopPropagation()
     setShowModal(true)
   }
@@ -22,8 +20,8 @@ function Todo(props) {
   return (
     <div
       className={
-        props.completed
-          ? 'todo completed flex flex-justify-between'
+        props.finished
+          ? 'todo finished flex flex-justify-between'
           : 'todo flex flex-justify-between'
       }
       onClick={() => props.onChangeActive && props.onChangeActive(props.id)}
@@ -34,8 +32,8 @@ function Todo(props) {
             className="checkbox"
             type="checkbox"
             onClick={(e) => e.stopPropagation()}
-            onChange={onChangeCompleted}
-            checked={props.completed}
+            onChange={onChangeFinished}
+            checked={props.finished}
           />
           <h2 className="title">{props.title}</h2>
         </div>
