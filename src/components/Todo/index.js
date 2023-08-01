@@ -40,7 +40,7 @@ function Todo(props) {
         </div>
         <div>{props.active && <p className="content">{props.content}</p>}</div>
       </div>
-      <button className="btn btn-danger delete" onClick={showModalHandler}>
+      <button className="btn btn-warning delete" onClick={showModalHandler}>
         delete
       </button>
       {showModal && (

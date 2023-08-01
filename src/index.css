@@ -31,8 +31,9 @@ body {
 }
 
 .btn{
-  width:100px;
+  min-width:90px;
   height: 30px;
+  padding: 0 10px;
   border: none;
   border-radius: 4px;
 }
@@ -93,4 +94,7 @@ input:focus{
 
 .m-t-10{
   margin-top: 10px;
+}
+.m-l-10{
+  margin-left: 10px;
 }

@@ -4,7 +4,7 @@ import AddTodo from './components/Todo/Add'
 
 function App() {
   const [todoList, setTodoList] = useState([])
-  const currentTodoList = useMemo(() => [...todoList], [todoList])
+  let currentTodoList = useMemo(() => [...todoList], [todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
 
   function onChangeCompleted(id, value) {
@@ -47,16 +47,37 @@ function App() {
     setTodoList([...currentTodoList])
   }
 
+  function onDeleteChecked() {
+    currentTodoList = currentTodoList.filter((todo) => !todo.completed)
+    setTodoList([...currentTodoList])
+  }
+
+  function onDeleteAll() {
+    currentTodoList = []
+    setTodoList([...currentTodoList])
+  }
+
   return (
     <div className="app">
       <div className="flex flex-justify-between flex-align-center">
-        <h1>My Todos</h1>
-        <button
-          onClick={() => setShowAddTodo(true)}
-          className="btn btn-primary"
-        >
-          Add Todo
-        </button>
+        <div className="flex flex-align-center">
+          <img src="/logo192.png" alt="logo" width="40" height="40" />
+          <h1 className="m-l-10">My Todos</h1>
+        </div>
+        <div className="flex flex-align-center">
+          <button
+            onClick={() => setShowAddTodo(true)}
+            className="btn btn-success"
+          >
+            Add
+          </button>
+          <button onClick={onDeleteChecked} className="btn btn-warning m-l-10">
+            Delete Checked
+          </button>
+          <button onClick={onDeleteAll} className="btn btn-danger m-l-10">
+            Delete All
+          </button>
+        </div>
       </div>
       {todoList.map((todo) => (
         <Todo
