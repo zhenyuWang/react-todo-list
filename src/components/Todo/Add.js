@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import './add.css'
+import './add.scss'
 import Modal from '../Modal'
 
 function AddTodo(props) {

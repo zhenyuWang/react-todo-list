@@ -1,4 +1,4 @@
-import './index.css'
+import './index.scss'
 
 function Modal(props) {
   const defaultMsg = 'Are you sure?'

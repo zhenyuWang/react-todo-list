@@ -8,10 +8,12 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-content {
-  font-size: 20px;
-}
+.modal {
+  .modal-content {
+    font-size: 20px;
+  }
 
-.modal-actions {
-  padding: 30px 60px 0 60px;
+  .modal-actions {
+    padding: 30px 60px 0 60px;
+  }
 }
