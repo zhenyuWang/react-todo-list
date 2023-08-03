@@ -5,92 +5,85 @@ import Modal from '../Modal'
 
 function TodoList() {
   const [todoList, setTodoList] = useState([])
-  let currentTodoList = useMemo(() => [...todoList], [todoList])
+  const currentTodoList = useMemo(() => [...todoList], [todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
   const [showDeleteCheckedModal, setDeleteCheckedModal] = useState(false)
   const [showDeleteAllModal, setDeleteAllModal] = useState(false)
   const [isAllFinished, setIsAllFinished] = useState(false)
-  let currentIsAllFinished = useMemo(() => isAllFinished, [isAllFinished])
+  const currentIsAllFinished = useMemo(() => isAllFinished, [isAllFinished])
   const finishedNum = useRef(0)
 
   function switchAllFinished() {
-    currentIsAllFinished = !currentIsAllFinished
-    setIsAllFinished(currentIsAllFinished)
-    finishedNum.current = currentIsAllFinished ? currentTodoList.length : 0
-    for (let i = 0; i < currentTodoList.length; i++) {
-      currentTodoList[i].finished = currentIsAllFinished
+    if (currentTodoList.length === 0) {
+      return
     }
-    setTodoList([...currentTodoList])
+    setIsAllFinished(!currentIsAllFinished)
+    finishedNum.current = !currentIsAllFinished ? currentTodoList.length : 0
+    setTodoList(
+      currentTodoList.map((todo) => {
+        todo.finished = !currentIsAllFinished
+        return todo
+      })
+    )
   }
 
   function onChangeFinished(id, value) {
-    for (let i = 0; i < currentTodoList.length; i++) {
-      if (currentTodoList[i].id === id) {
-        currentTodoList[i].finished = value
-        finishedNum.current += value ? 1 : -1
-        currentIsAllFinished = finishedNum.current === currentTodoList.length
-        setIsAllFinished(currentIsAllFinished)
-        break
-      }
-    }
-    setTodoList([...currentTodoList])
+    const targetTodo = currentTodoList.find((todo) => todo.id === id)
+    targetTodo.finished = value
+    setTodoList(currentTodoList)
+    finishedNum.current += value ? 1 : -1
+    setIsAllFinished(finishedNum.current === currentTodoList.length)
   }
   function onDeleteTodo(id) {
-    for (let i = 0; i < currentTodoList.length; i++) {
-      if (currentTodoList[i].id === id) {
-        finishedNum.current -= currentTodoList[i].finished ? 1 : 0
-        currentTodoList.splice(i, 1)
-        currentIsAllFinished = finishedNum.current === currentTodoList.length
-        setIsAllFinished(currentIsAllFinished)
-        break
-      }
-    }
-    setTodoList([...currentTodoList])
+    const targetIndex = currentTodoList.findIndex((todo) => todo.id === id)
+    finishedNum.current -= currentTodoList[targetIndex].finished ? 1 : 0
+    currentTodoList.splice(targetIndex, 1)
+    setTodoList(currentTodoList)
+    setIsAllFinished(finishedNum.current === currentTodoList.length)
   }
 
   function onAddTodo(params) {
     setShowAddTodo(false)
-    currentTodoList.push({
-      ...params,
-      finished: false,
-      active: false,
-    })
-    currentIsAllFinished = false
-    setIsAllFinished(currentIsAllFinished)
-    setTodoList([...currentTodoList])
+    setTodoList([
+      ...currentTodoList,
+      {
+        ...params,
+        finished: false,
+        active: false,
+      },
+    ])
+    setIsAllFinished(false)
   }
 
   function onChangeActive(id) {
-    for (let i = 0; i < currentTodoList.length; i++) {
-      if (currentTodoList[i].id === id) {
-        currentTodoList[i].active = !currentTodoList[i].active
-      } else {
-        currentTodoList[i].active = false
-      }
-    }
-    setTodoList([...currentTodoList])
+    setTodoList(
+      currentTodoList.map((todo) => {
+        if (todo.id === id) {
+          todo.active = !todo.active
+        } else {
+          todo.active = false
+        }
+        return todo
+      })
+    )
   }
 
   function onDeleteChecked() {
-    currentTodoList = currentTodoList.filter((todo) => !todo.finished)
-    setTodoList([...currentTodoList])
+    setTodoList(currentTodoList.filter((todo) => !todo.finished))
     setDeleteCheckedModal(false)
     finishedNum.current = 0
-    currentIsAllFinished = false
-    setIsAllFinished(currentIsAllFinished)
+    setIsAllFinished(false)
   }
 
   function onDeleteAll() {
-    currentTodoList = []
-    setTodoList([...currentTodoList])
+    setTodoList([])
     setDeleteAllModal(false)
     finishedNum.current = 0
-    currentIsAllFinished = false
-    setIsAllFinished(currentIsAllFinished)
+    setIsAllFinished(false)
   }
 
   return (
-    <div className="app">
+    <>
       <div className="flex flex-justify-between flex-align-center">
         <div className="flex flex-align-center">
           <img src="/logo.png" alt="logo" width="40" height="40" />
@@ -153,7 +146,7 @@ function TodoList() {
           msg="Are you sure you want to delete all?"
         ></Modal>
       )}
-    </div>
+    </>
   )
 }
 

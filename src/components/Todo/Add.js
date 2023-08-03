@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import './add.scss'
 import Modal from '../Modal'
 
-function AddTodo(props) {
+function AddTodo({ onClose, onAddTodo }) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [errorText, setErrorText] = useState('')
@@ -30,47 +30,44 @@ function AddTodo(props) {
     if (!content) {
       return setErrorText('content is required')
     }
-    props.onAddTodo &&
-      props.onAddTodo({
-        id: Date.now(),
-        title,
-        content,
-      })
+    onAddTodo({
+      id: Date.now(),
+      title,
+      content,
+    })
   }
 
   return (
-    <div>
-      <Modal
-        onCancel={props.onClose}
-        onConfirm={addTodo}
-        content={
-          <div className="add-todo-content">
-            <div className="flex flex-align-center">
-              <div className="label font-size-20">title:</div>
-              <input
-                className="font-size-20"
-                type="text"
-                ref={inputTitleRef}
-                value={title}
-                onInput={onTitleInput}
-              />
-            </div>
-            <div className="flex flex-align-center m-t-10">
-              <div className="label font-size-20">content:</div>
-              <input
-                className="font-size-20"
-                type="text"
-                value={content}
-                onInput={onContentInput}
-              />
-            </div>
-            {errorText && (
-              <div className="m-t-10 error-text">error: {errorText}</div>
-            )}
+    <Modal
+      onCancel={onClose}
+      onConfirm={addTodo}
+      content={
+        <div className="add-todo-content">
+          <div className="flex flex-align-center">
+            <div className="label font-size-20">title:</div>
+            <input
+              className="font-size-20"
+              type="text"
+              ref={inputTitleRef}
+              value={title}
+              onInput={onTitleInput}
+            />
           </div>
-        }
-      />
-    </div>
+          <div className="flex flex-align-center m-t-10">
+            <div className="label font-size-20">content:</div>
+            <input
+              className="font-size-20"
+              type="text"
+              value={content}
+              onInput={onContentInput}
+            />
+          </div>
+          {errorText && (
+            <div className="m-t-10 error-text">error: {errorText}</div>
+          )}
+        </div>
+      }
+    />
   )
 }
 

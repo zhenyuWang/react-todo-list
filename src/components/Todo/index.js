@@ -1,57 +1,60 @@
 import './index.scss'
 import { useState } from 'react'
 import Modal from '../Modal'
+import { stopPropagation } from '../../utils'
 
-function Todo(props) {
+function Todo({
+  id,
+  finished,
+  title,
+  content,
+  active,
+  onChangeActive,
+  onChangeFinished,
+  onDeleteTodo,
+}) {
   const [showModal, setShowModal] = useState(false)
-
-  function onChangeFinished(e) {
-    props.onChangeFinished && props.onChangeFinished(props.id, e.target.checked)
+  function setModalState(e, value) {
+    stopPropagation(e)
+    setShowModal(value)
   }
-  function onDeleteTodo() {
-    setShowModal(false)
-    props.onDeleteTodo && props.onDeleteTodo(props.id)
-  }
-  function showModalHandler(e) {
-    e.stopPropagation()
-    setShowModal(true)
+  function deleteTodo(e) {
+    setModalState(e, false)
+    onDeleteTodo(id)
   }
 
   return (
     <div
       className={
-        props.finished
+        finished
           ? 'todo finished flex flex-justify-between'
           : 'todo flex flex-justify-between'
       }
-      onClick={() => props.onChangeActive && props.onChangeActive(props.id)}
+      onClick={() => onChangeActive(id)}
     >
       <div>
         <div className="flex">
           <input
             className="checkbox"
             type="checkbox"
-            onClick={(e) => e.stopPropagation()}
-            onChange={onChangeFinished}
-            checked={props.finished}
+            onClick={stopPropagation}
+            onChange={(e) => onChangeFinished(id, e.target.checked)}
+            checked={finished}
           />
-          <h2 className="title">{props.title}</h2>
+          <h2 className="title">{title}</h2>
         </div>
-        <div>{props.active && <p className="content">{props.content}</p>}</div>
+        <div>{active && <p className="content">{content}</p>}</div>
       </div>
-      <button className="btn btn-warning delete" onClick={showModalHandler}>
+      <button
+        className="btn btn-warning delete"
+        onClick={(e) => setModalState(e, true)}
+      >
         delete
       </button>
       {showModal && (
         <Modal
-          onCancel={(e) => {
-            e.stopPropagation()
-            setShowModal(false)
-          }}
-          onConfirm={(e) => {
-            e.stopPropagation()
-            onDeleteTodo()
-          }}
+          onCancel={(e) => setModalState(e, false)}
+          onConfirm={deleteTodo}
           msg="Are you sure you want to delete?"
         />
       )}
