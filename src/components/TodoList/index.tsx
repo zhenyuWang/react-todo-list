@@ -2,6 +2,7 @@ import { useState, useMemo, useRef } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
+import './index.scss'
 
 type TypeTodo = {
   id: number
@@ -12,43 +13,35 @@ type TypeTodo = {
 }
 
 function TodoList() {
-  const [todoList, setTodoList] = useState([] as TypeTodo[])
-  const currentTodoList: TypeTodo[] = useMemo(() => [...todoList], [todoList])
+  const [_todoList, setTodoList] = useState([] as TypeTodo[])
+  const todoList: TypeTodo[] = useMemo(() => [..._todoList], [_todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
   const [showDeleteCheckedModal, setDeleteCheckedModal] = useState(false)
   const [showDeleteAllModal, setDeleteAllModal] = useState(false)
-  const [isAllFinished, setIsAllFinished] = useState(false)
-  const currentIsAllFinished = useMemo(() => isAllFinished, [isAllFinished])
+  const [_isAllFinished, setIsAllFinished] = useState(false)
+  const isAllFinished = useMemo(() => _isAllFinished, [_isAllFinished])
   const finishedNum = useRef(0)
 
   function switchAllFinished() {
-    if (currentTodoList.length === 0) {
+    if (todoList.length === 0) {
       return
     }
-    setIsAllFinished(!currentIsAllFinished)
-    finishedNum.current = !currentIsAllFinished ? currentTodoList.length : 0
+    setIsAllFinished(!isAllFinished)
+    finishedNum.current = !isAllFinished ? todoList.length : 0
     setTodoList(
-      currentTodoList.map((todo) => {
-        todo.finished = !currentIsAllFinished
+      todoList.map((todo) => {
+        todo.finished = !isAllFinished
         return todo
       })
     )
   }
 
   function onChangeFinished(id: number, value: boolean) {
-    const targetTodo = currentTodoList.find((todo) => todo.id === id)
+    const targetTodo = todoList.find((todo) => todo.id === id)
     targetTodo!.finished = value
-    setTodoList(currentTodoList)
+    setTodoList(todoList)
     finishedNum.current += value ? 1 : -1
-    setIsAllFinished(finishedNum.current === currentTodoList.length)
-  }
-
-  function onDeleteTodo(id: number) {
-    const targetIndex = currentTodoList.findIndex((todo) => todo.id === id)
-    finishedNum.current -= currentTodoList[targetIndex].finished ? 1 : 0
-    currentTodoList.splice(targetIndex, 1)
-    setTodoList(currentTodoList)
-    setIsAllFinished(finishedNum.current === currentTodoList.length)
+    setIsAllFinished(finishedNum.current === todoList.length)
   }
 
   function onAddTodo({
@@ -62,7 +55,7 @@ function TodoList() {
   }) {
     setShowAddTodo(false)
     setTodoList([
-      ...currentTodoList,
+      ...todoList,
       {
         id,
         title,
@@ -74,9 +67,27 @@ function TodoList() {
     setIsAllFinished(false)
   }
 
+  function onEditTodo(id: number, title: string, content: string) {
+    const todo = todoList.find((todo) => todo.id === id)
+    if (!todo) {
+      return
+    }
+    todo.title = title
+    todo.content = content
+    setTodoList([...todoList])
+  }
+
+  function onDeleteTodo(id: number) {
+    const targetIndex = todoList.findIndex((todo) => todo.id === id)
+    finishedNum.current -= todoList[targetIndex].finished ? 1 : 0
+    todoList.splice(targetIndex, 1)
+    setTodoList(todoList)
+    setIsAllFinished(finishedNum.current === todoList.length)
+  }
+
   function onChangeActive(id: number) {
     setTodoList(
-      currentTodoList.map((todo) => {
+      todoList.map((todo) => {
         if (todo.id === id) {
           todo.active = !todo.active
         } else {
@@ -88,7 +99,7 @@ function TodoList() {
   }
 
   function onDeleteChecked() {
-    setTodoList(currentTodoList.filter((todo) => !todo.finished))
+    setTodoList(todoList.filter((todo) => !todo.finished))
     setDeleteCheckedModal(false)
     finishedNum.current = 0
     setIsAllFinished(false)
@@ -103,7 +114,7 @@ function TodoList() {
 
   return (
     <>
-      <div className="flex flex-justify-between flex-align-center">
+      <div className="flex flex-justify-between flex-align-center todo-list">
         <div className="flex flex-align-center">
           <img src="/logo.png" alt="logo" width="40" height="40" />
           <h1 className="m-l-10">My TodoList</h1>
@@ -131,16 +142,17 @@ function TodoList() {
             onClick={switchAllFinished}
             className="btn btn-primary m-l-10"
           >
-            {currentIsAllFinished ? 'All Unfinished' : 'Finished All'}
+            {isAllFinished ? 'All Unfinished' : 'Finished All'}
           </button>
         </div>
       </div>
-      {todoList.map((todo) => (
+      {_todoList.map((todo) => (
         <Todo
           key={todo.id}
           {...todo}
           onChangeActive={onChangeActive}
           onChangeFinished={onChangeFinished}
+          onEditTodo={onEditTodo}
           onDeleteTodo={onDeleteTodo}
         />
       ))}
