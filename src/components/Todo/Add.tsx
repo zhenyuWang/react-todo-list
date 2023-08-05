@@ -41,10 +41,10 @@ function AddTodo({
 
   function addTodo() {
     if (!title) {
-      return setErrorText('title is required')
+      return setErrorText('title is required!')
     }
     if (!content) {
-      return setErrorText('content is required')
+      return setErrorText('content is required!')
     }
     onAddTodo({
       id: Date.now(),
@@ -62,20 +62,22 @@ function AddTodo({
           <div className="flex flex-align-center">
             <div className="label font-size-20">title:</div>
             <input
-              className="font-size-20"
+              className="font-size-18"
               type="text"
               ref={inputTitleRef}
               value={title}
               onInput={onTitleInput}
+              placeholder="Please enter title"
             />
           </div>
           <div className="flex flex-align-center m-t-10">
             <div className="label font-size-20">content:</div>
             <input
-              className="font-size-20"
+              className="font-size-18"
               type="text"
               value={content}
               onInput={onContentInput}
+              placeholder="Please enter content"
             />
           </div>
           {errorText && (
