@@ -1,4 +1,5 @@
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import App from '../App'
 
 describe('TodoList', () => {
@@ -7,10 +8,7 @@ describe('TodoList', () => {
 
     const btnAdd = screen.getByText('Add')
     expect(btnAdd.className).toBe('btn btn-success')
-
-    await act(() => {
-      btnAdd.click()
-    })
+    await userEvent.click(btnAdd)
 
     const titleLabel = screen.getByText('title:')
     expect(titleLabel).toBeInTheDocument()

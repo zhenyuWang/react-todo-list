@@ -44,6 +44,7 @@ function Todo({
           : 'todo flex flex-justify-between'
       }
       onClick={() => onChangeActive(id)}
+      data-testid="todo"
     >
       <div>
         <div className="flex">
@@ -62,7 +63,7 @@ function Todo({
         className="btn btn-warning delete"
         onClick={(e) => setModalState(e, true)}
       >
-        delete
+        Delete
       </button>
       {showModal && (
         <Modal

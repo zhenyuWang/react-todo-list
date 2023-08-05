@@ -1,47 +1,34 @@
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import App from '../App'
 
 describe('Add Todo', () => {
   it('click add modal cancel remove modal', async () => {
     render(<App />)
-    const btnAdd = screen.getByText('Add')
-    await act(() => {
-      btnAdd.click()
-    })
-    const btnCancel = screen.getByText('Cancel')
-    await act(() => {
-      btnCancel.click()
-    })
-
+    await userEvent.click(screen.getByText('Add'))
+    await userEvent.click(screen.getByText('Cancel'))
     expect(screen.queryByText('title:')).toBeNull()
   })
 
   it('click add modal confirm show error message', async () => {
     render(<App />)
-    const btnAdd = screen.getByText('Add')
-    await act(() => {
-      btnAdd.click()
-    })
+    await userEvent.click(screen.getByText('Add'))
     const btnConfirm = screen.getByText('Confirm')
-    await act(() => {
-      btnConfirm.click()
-    })
+    await userEvent.click(btnConfirm)
     expect(screen.getByText('error: title is required!')).toBeInTheDocument()
 
-    const titleInput = screen.getByPlaceholderText('Please enter title')
-    titleInput.setAttribute('value', 'title1')
-    await act(() => {
-      titleInput.dispatchEvent(new Event('input', { bubbles: true }))
-      btnConfirm.click()
-    })
+    await userEvent.type(
+      screen.getByPlaceholderText('Please enter title'),
+      'title'
+    )
+    await userEvent.click(btnConfirm)
     expect(screen.getByText('error: content is required!')).toBeInTheDocument()
 
-    const contentInput = screen.getByPlaceholderText('Please enter content')
-    contentInput.setAttribute('value', 'content2')
-    await act(() => {
-      contentInput.dispatchEvent(new Event('input', { bubbles: true }))
-      btnConfirm.click()
-    })
+    await userEvent.type(
+      screen.getByPlaceholderText('Please enter content'),
+      'content'
+    )
+    await userEvent.click(btnConfirm)
 
     expect(screen.queryByText('error: title is required!')).toBeNull()
     expect(screen.queryByText('error: content is required!')).toBeNull()
@@ -49,26 +36,17 @@ describe('Add Todo', () => {
 
   it('click add modal confirm add Todo', async () => {
     render(<App />)
-    const btnAdd = screen.getByText('Add')
-    await act(() => {
-      btnAdd.click()
-    })
+    await userEvent.click(screen.getByText('Add'))
+    await userEvent.type(
+      screen.getByPlaceholderText('Please enter title'),
+      'title'
+    )
+    await userEvent.type(
+      screen.getByPlaceholderText('Please enter content'),
+      'content'
+    )
+    await userEvent.click(screen.getByText('Confirm'))
 
-    const titleInput = screen.getByPlaceholderText('Please enter title')
-    titleInput.setAttribute('value', 'title1')
-    await act(() => {
-      titleInput.dispatchEvent(new Event('input', { bubbles: true }))
-    })
-    const contentInput = screen.getByPlaceholderText('Please enter content')
-    contentInput.setAttribute('value', 'content2')
-    await act(() => {
-      contentInput.dispatchEvent(new Event('input', { bubbles: true }))
-    })
-    const btnConfirm = screen.getByText('Confirm')
-    await act(() => {
-      btnConfirm.click()
-    })
-
-    expect(screen.getByText('title1')).toBeInTheDocument()
+    expect(screen.getByText('title')).toBeInTheDocument()
   })
 })
