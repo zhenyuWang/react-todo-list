@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, MouseEventHandler } from 'react'
+import { useState, useRef, useEffect, MouseEventHandler } from 'react'
 import Modal from '../Modal'
 import './add.scss'
 

@@ -1,5 +1,5 @@
 import './index.scss'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Modal from '../Modal'
 import { stopPropagation } from '../../utils'
 

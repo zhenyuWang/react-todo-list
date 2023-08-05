@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
