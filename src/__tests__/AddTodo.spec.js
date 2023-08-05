@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from '../App'
+import { addTodo } from './utils'
 
 describe('Add Todo', () => {
   it('click add modal cancel remove modal', async () => {
@@ -36,17 +37,10 @@ describe('Add Todo', () => {
 
   it('click add modal confirm add Todo', async () => {
     render(<App />)
-    await userEvent.click(screen.getByText('Add'))
-    await userEvent.type(
-      screen.getByPlaceholderText('Please enter title'),
-      'title'
-    )
-    await userEvent.type(
-      screen.getByPlaceholderText('Please enter content'),
-      'content'
-    )
-    await userEvent.click(screen.getByText('Confirm'))
 
-    expect(screen.getByText('title')).toBeInTheDocument()
+    const title = 'title'
+    await addTodo(title, 'content')
+
+    expect(screen.getByText(title)).toBeInTheDocument()
   })
 })
