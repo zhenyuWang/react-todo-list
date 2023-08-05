@@ -1,6 +1,17 @@
+import React, { MouseEventHandler, ReactNode } from 'react'
 import './index.scss'
 
-function Modal({ onCancel, content, msg, onConfirm }) {
+function Modal({
+  onCancel,
+  content,
+  msg,
+  onConfirm,
+}: {
+  onCancel: MouseEventHandler
+  content?: ReactNode
+  msg?: string
+  onConfirm: MouseEventHandler
+}) {
   const defaultMsg = 'Are you sure?'
 
   return (

@@ -1,28 +1,44 @@
-import { useState, useRef, useEffect } from 'react'
-import './add.scss'
+import React, { useState, useRef, useEffect, MouseEventHandler } from 'react'
 import Modal from '../Modal'
+import './add.scss'
 
-function AddTodo({ onClose, onAddTodo }) {
+function AddTodo({
+  onClose,
+  onAddTodo,
+}: {
+  onClose: MouseEventHandler
+  onAddTodo: ({
+    id,
+    title,
+    content,
+  }: {
+    id: number
+    title: string
+    content: string
+  }) => void
+}) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [errorText, setErrorText] = useState('')
   const inputTitleRef = useRef(null)
   useEffect(() => {
-    inputTitleRef.current.focus()
+    ;(inputTitleRef.current! as HTMLElement).focus()
   }, [])
 
-  function onTitleInput(e) {
+  function onTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setTitle(e.target.value)
     if (e.target.value && content) {
       setErrorText('')
     }
   }
-  function onContentInput(e) {
+
+  function onContentInput(e: React.ChangeEvent<HTMLInputElement>) {
     setContent(e.target.value)
     if (title && e.target.value) {
       setErrorText('')
     }
   }
+
   function addTodo() {
     if (!title) {
       return setErrorText('title is required')

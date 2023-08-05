@@ -1,11 +1,19 @@
-import { useState, useMemo, useRef } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
 
+type TypeTodo = {
+  id: number
+  title: string
+  content: string
+  finished: boolean
+  active: boolean
+}
+
 function TodoList() {
-  const [todoList, setTodoList] = useState([])
-  const currentTodoList = useMemo(() => [...todoList], [todoList])
+  const [todoList, setTodoList] = useState([] as TypeTodo[])
+  const currentTodoList: TypeTodo[] = useMemo(() => [...todoList], [todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
   const [showDeleteCheckedModal, setDeleteCheckedModal] = useState(false)
   const [showDeleteAllModal, setDeleteAllModal] = useState(false)
@@ -27,14 +35,15 @@ function TodoList() {
     )
   }
 
-  function onChangeFinished(id, value) {
+  function onChangeFinished(id: number, value: boolean) {
     const targetTodo = currentTodoList.find((todo) => todo.id === id)
-    targetTodo.finished = value
+    targetTodo!.finished = value
     setTodoList(currentTodoList)
     finishedNum.current += value ? 1 : -1
     setIsAllFinished(finishedNum.current === currentTodoList.length)
   }
-  function onDeleteTodo(id) {
+
+  function onDeleteTodo(id: number) {
     const targetIndex = currentTodoList.findIndex((todo) => todo.id === id)
     finishedNum.current -= currentTodoList[targetIndex].finished ? 1 : 0
     currentTodoList.splice(targetIndex, 1)
@@ -42,12 +51,22 @@ function TodoList() {
     setIsAllFinished(finishedNum.current === currentTodoList.length)
   }
 
-  function onAddTodo(params) {
+  function onAddTodo({
+    id,
+    title,
+    content,
+  }: {
+    id: number
+    title: string
+    content: string
+  }) {
     setShowAddTodo(false)
     setTodoList([
       ...currentTodoList,
       {
-        ...params,
+        id,
+        title,
+        content,
         finished: false,
         active: false,
       },
@@ -55,7 +74,7 @@ function TodoList() {
     setIsAllFinished(false)
   }
 
-  function onChangeActive(id) {
+  function onChangeActive(id: number) {
     setTodoList(
       currentTodoList.map((todo) => {
         if (todo.id === id) {
@@ -87,7 +106,7 @@ function TodoList() {
       <div className="flex flex-justify-between flex-align-center">
         <div className="flex flex-align-center">
           <img src="/logo.png" alt="logo" width="40" height="40" />
-          <h1 className="m-l-10">My Todos</h1>
+          <h1 className="m-l-10">My TodoList</h1>
         </div>
         <div className="flex flex-align-center">
           <button
@@ -123,7 +142,6 @@ function TodoList() {
           onChangeActive={onChangeActive}
           onChangeFinished={onChangeFinished}
           onDeleteTodo={onDeleteTodo}
-          onAddTodo={onAddTodo}
         />
       ))}
 

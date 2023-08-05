@@ -1,5 +1,5 @@
 import './index.scss'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Modal from '../Modal'
 import { stopPropagation } from '../../utils'
 
@@ -12,13 +12,26 @@ function Todo({
   onChangeActive,
   onChangeFinished,
   onDeleteTodo,
+}: {
+  id: number
+  finished: boolean
+  title: string
+  content: string
+  active: boolean
+  onChangeActive: (id: number) => void
+  onChangeFinished: (id: number, value: boolean) => void
+  onDeleteTodo: (id: number) => void
 }) {
   const [showModal, setShowModal] = useState(false)
-  function setModalState(e, value) {
+
+  function setModalState(
+    e: React.MouseEvent<Element, MouseEvent>,
+    value: boolean
+  ) {
     stopPropagation(e)
     setShowModal(value)
   }
-  function deleteTodo(e) {
+  function deleteTodo(e: React.MouseEvent<Element, MouseEvent>) {
     setModalState(e, false)
     onDeleteTodo(id)
   }
