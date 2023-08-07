@@ -2,6 +2,10 @@
   "name": "react-todo-list",
   "version": "0.1.0",
   "private": true,
+  "devDependencies": {
+    "chalk": "^5.3.0",
+    "simple-git-hooks": "^2.9.0"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
@@ -22,6 +26,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "gitHooks": {
+    "commit-msg": "node scripts/verifyCommit.js",
+    "pre-push": "npm run test"
   },
   "eslintConfig": {
     "extends": [
