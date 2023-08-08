@@ -1,5 +1,5 @@
 import { MouseEventHandler, ReactNode } from 'react'
-import './index.scss'
+import classes from './index.module.scss'
 
 function Modal({
   onCancel,
@@ -16,12 +16,16 @@ function Modal({
 
   return (
     <>
-      <div className="backdrop" onClick={onCancel} />
-      <div className="modal">
+      <div className={classes.backdrop} onClick={onCancel} />
+      <div className={classes.modal}>
         {content || (
-          <div className="modal-content text-center">{msg || defaultMsg}</div>
+          <div className={`${classes['modal-content']} text-center`}>
+            {msg || defaultMsg}
+          </div>
         )}
-        <div className="modal-actions flex flex-justify-between">
+        <div
+          className={`${classes['modal-actions']} flex flex-justify-between`}
+        >
           <button className="btn btn-default" onClick={onCancel}>
             Cancel
           </button>

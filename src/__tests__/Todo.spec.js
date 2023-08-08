@@ -16,7 +16,7 @@ describe('Todo', () => {
 
     const deleteBtn = screen.getByText('Delete')
     expect(deleteBtn).toBeInTheDocument()
-    expect(deleteBtn.className).toBe('btn btn-warning delete m-l-10')
+    expect(deleteBtn.className).toBe('btn btn-warning m-l-10')
   })
 
   it('switch show content', async () => {

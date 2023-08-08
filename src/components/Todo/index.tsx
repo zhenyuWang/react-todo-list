@@ -1,7 +1,8 @@
-import './index.scss'
 import { useMemo, useRef, useState } from 'react'
 import Modal from '../Modal'
 import { stopPropagation } from '../../utils'
+import indexClasses from './index.module.scss'
+import addClasses from './add.module.scss'
 
 function Todo({
   id,
@@ -84,28 +85,30 @@ function Todo({
     <div
       className={
         finished
-          ? 'todo finished flex flex-justify-between flex-align-start'
-          : 'todo flex flex-justify-between flex-align-start'
+          ? `${indexClasses.todo} ${indexClasses.finished} flex flex-justify-between flex-align-start`
+          : `${indexClasses.todo} flex flex-justify-between flex-align-start`
       }
       onClick={() => onChangeActive(id)}
       data-testid="todo"
     >
       <div className="flex flex-align-start">
         <input
-          className="checkbox m-t-10"
+          className={`${indexClasses.checkbox} m-t-10`}
           type="checkbox"
           onClick={stopPropagation}
           onChange={(e) => onChangeFinished(id, e.target.checked)}
           checked={finished}
         />
         <div>
-          <h2 className="title">{title}</h2>
-          <div>{active && <p className="content">{content}</p>}</div>
+          <h2 className={indexClasses.title}>{title}</h2>
+          <div>
+            {active && <p className={indexClasses.content}>{content}</p>}
+          </div>
         </div>
       </div>
       <div className="flex flex-align-center btn-box">
         <button
-          className="btn btn-primary edit"
+          className="btn btn-primary"
           onClick={(e) => {
             setEditModalState(e, true)
             setTimeout(() => {
@@ -116,7 +119,7 @@ function Todo({
           Edit
         </button>
         <button
-          className="btn btn-warning delete m-l-10"
+          className="btn btn-warning m-l-10"
           onClick={(e) => setDeleteModalState(e, true)}
         >
           Delete
@@ -127,9 +130,9 @@ function Todo({
           onCancel={(e) => setEditModalState(e, false)}
           onConfirm={editTodo}
           content={
-            <div className="add-todo-content">
+            <div className={addClasses['add-todo-content']}>
               <div className="flex flex-align-center">
-                <div className="label font-size-20">title:</div>
+                <div className={`${addClasses.label} font-size-20`}>title:</div>
                 <input
                   className="font-size-18"
                   type="text"
@@ -140,7 +143,9 @@ function Todo({
                 />
               </div>
               <div className="flex flex-align-center m-t-10">
-                <div className="label font-size-20">content:</div>
+                <div className={`${addClasses.label} font-size-20`}>
+                  content:
+                </div>
                 <input
                   className="font-size-18"
                   type="text"
@@ -150,7 +155,9 @@ function Todo({
                 />
               </div>
               {errorText && (
-                <div className="m-t-10 error-text">error: {errorText}</div>
+                <div className={`m-t-10 ${addClasses['error-text']}`}>
+                  error: {errorText}
+                </div>
               )}
             </div>
           }

@@ -2,7 +2,7 @@ import { useState, useMemo, useRef } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
-import './index.scss'
+import classes from './index.module.scss'
 
 type TypeTodo = {
   id: number
@@ -114,7 +114,9 @@ function TodoList() {
 
   return (
     <>
-      <div className="flex flex-justify-between flex-align-center todo-list">
+      <div
+        className={`flex flex-justify-between flex-align-center ${classes['todo-list']}`}
+      >
         <div className="flex flex-align-center">
           <img src="/logo.png" alt="logo" width="40" height="40" />
           <h1 className="m-l-10">My TodoList</h1>

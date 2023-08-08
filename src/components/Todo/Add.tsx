@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, MouseEventHandler } from 'react'
 import Modal from '../Modal'
-import './add.scss'
+import classes from './add.module.scss'
 
 function AddTodo({
   onClose,
@@ -58,9 +58,9 @@ function AddTodo({
       onCancel={onClose}
       onConfirm={addTodo}
       content={
-        <div className="add-todo-content">
+        <div className={classes['add-todo-content']}>
           <div className="flex flex-align-center">
-            <div className="label font-size-20">title:</div>
+            <div className={`${classes.label} font-size-20`}>title:</div>
             <input
               className="font-size-18"
               type="text"
@@ -71,7 +71,7 @@ function AddTodo({
             />
           </div>
           <div className="flex flex-align-center m-t-10">
-            <div className="label font-size-20">content:</div>
+            <div className={`${classes.label} font-size-20`}>content:</div>
             <input
               className="font-size-18"
               type="text"
@@ -81,7 +81,9 @@ function AddTodo({
             />
           </div>
           {errorText && (
-            <div className="m-t-10 error-text">error: {errorText}</div>
+            <div className={`m-t-10 ${classes['error-text']}`}>
+              error: {errorText}
+            </div>
           )}
         </div>
       }

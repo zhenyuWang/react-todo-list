@@ -9,6 +9,17 @@
 }
 
 .modal {
+  width: 360px;
+  margin: -150px auto 0 auto;
+  padding: 30px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 999;
+  background-color: #fff;
+  border-radius: 10px;
+
   .modal-content {
     font-size: 20px;
   }
