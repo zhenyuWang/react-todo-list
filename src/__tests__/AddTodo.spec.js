@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from '../App'
-import { addTodo } from './utils'
+import { addTodo, clearStorage } from './utils'
 
 describe('Add Todo', () => {
+  beforeEach(() => {
+    clearStorage()
+  })
+
   it('click add modal cancel remove modal', async () => {
     render(<App />)
     await userEvent.click(screen.getByText('Add'))
@@ -40,6 +44,14 @@ describe('Add Todo', () => {
 
     const title = 'title'
     await addTodo(title, 'content')
+
+    const todo = JSON.parse(localStorage.getItem('todoList'))[0]
+    expect(typeof todo.id).toBe('number')
+    expect(todo.title).toBe(title)
+    expect(todo.content).toBe('content')
+    expect(todo.content).toBe('content')
+    expect(todo.finished).toBe(false)
+    expect(todo.active).toBe(false)
 
     expect(screen.getByText(title)).toBeInTheDocument()
   })

@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from '../App'
-import { addTodo } from './utils'
+import { addTodo, clearStorage } from './utils'
 
 describe('Todo', () => {
+  beforeEach(() => {
+    clearStorage()
+  })
+
   it('add', async () => {
     render(<App />)
     const title = 'title'

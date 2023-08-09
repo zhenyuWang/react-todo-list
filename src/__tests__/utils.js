@@ -10,4 +10,8 @@ export async function addTodo(title, content) {
   await userEvent.click(screen.getByText('Confirm'))
 }
 
+export function clearStorage() {
+  localStorage.clear()
+}
+
 it('fix no test error', async () => {})

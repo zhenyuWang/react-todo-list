@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
@@ -13,7 +13,9 @@ type TypeTodo = {
 }
 
 function TodoList() {
-  const [_todoList, setTodoList] = useState([] as TypeTodo[])
+  const storageTodoList = localStorage.getItem('todoList')
+  const initTodoList = storageTodoList ? JSON.parse(storageTodoList) : []
+  const [_todoList, setTodoList] = useState(initTodoList as TypeTodo[])
   const todoList: TypeTodo[] = useMemo(() => [..._todoList], [_todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
   const [showDeleteCheckedModal, setDeleteCheckedModal] = useState(false)
@@ -21,6 +23,9 @@ function TodoList() {
   const [_isAllFinished, setIsAllFinished] = useState(false)
   const isAllFinished = useMemo(() => _isAllFinished, [_isAllFinished])
   const finishedNum = useRef(0)
+  useEffect(() => {
+    localStorage.setItem('todoList', JSON.stringify(todoList))
+  }, [todoList])
 
   function switchAllFinished() {
     if (todoList.length === 0) {
