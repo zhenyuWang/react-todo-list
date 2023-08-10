@@ -52,7 +52,7 @@ function Todo({
 
   function setEditModalState(
     e: React.MouseEvent<Element, MouseEvent>,
-    value: boolean
+    value: boolean,
   ) {
     stopPropagation(e)
     setShowEditModal(value)
@@ -71,7 +71,7 @@ function Todo({
 
   function setDeleteModalState(
     e: React.MouseEvent<Element, MouseEvent>,
-    value: boolean
+    value: boolean,
   ) {
     stopPropagation(e)
     setShowDeleteModal(value)

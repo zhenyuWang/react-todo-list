@@ -37,7 +37,7 @@ function TodoList() {
       todoList.map((todo) => {
         todo.finished = !isAllFinished
         return todo
-      })
+      }),
     )
   }
 
@@ -99,7 +99,7 @@ function TodoList() {
           todo.active = false
         }
         return todo
-      })
+      }),
     )
   }
 
