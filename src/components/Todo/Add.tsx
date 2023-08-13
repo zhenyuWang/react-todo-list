@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, MouseEventHandler } from 'react'
 import Modal from '../Modal'
-import classes from './add.module.scss'
 
 function AddTodo({
   onClose,
@@ -22,28 +21,28 @@ function AddTodo({
   const [errorText, setErrorText] = useState('')
   const inputTitleRef = useRef(null)
   useEffect(() => {
-    ;(inputTitleRef.current! as HTMLElement).focus()
+    ;(inputTitleRef.current as unknown as HTMLElement).focus()
   }, [])
 
   function onTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setTitle(e.target.value)
-    if (e.target.value && content) {
+    if (e.target.value !== '' && content !== '') {
       setErrorText('')
     }
   }
 
   function onContentInput(e: React.ChangeEvent<HTMLInputElement>) {
     setContent(e.target.value)
-    if (title && e.target.value) {
+    if (title !== '' && e.target.value !== '') {
       setErrorText('')
     }
   }
 
   function addTodo() {
-    if (!title) {
+    if (title === '') {
       return setErrorText('title is required!')
     }
-    if (!content) {
+    if (content === '') {
       return setErrorText('content is required!')
     }
     onAddTodo({
@@ -58,11 +57,11 @@ function AddTodo({
       onCancel={onClose}
       onConfirm={addTodo}
       content={
-        <div className={classes['add-todo-content']}>
-          <div className="flex flex-align-center">
-            <div className={`${classes.label} font-size-20`}>title:</div>
+        <div>
+          <div className="flex-align-center flex">
+            <div className="w-20 text-lg leading-8 text-slate-500">title:</div>
             <input
-              className="font-size-18"
+              className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
               type="text"
               ref={inputTitleRef}
               value={title}
@@ -70,20 +69,20 @@ function AddTodo({
               placeholder="Please enter title"
             />
           </div>
-          <div className="flex flex-align-center m-t-10">
-            <div className={`${classes.label} font-size-20`}>content:</div>
+          <div className="flex-align-center mt-4 flex">
+            <div className="w-20 text-lg leading-8 text-slate-500">
+              content:
+            </div>
             <input
-              className="font-size-18"
+              className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
               type="text"
               value={content}
               onInput={onContentInput}
               placeholder="Please enter content"
             />
           </div>
-          {errorText && (
-            <div className={`m-t-10 ${classes['error-text']}`}>
-              error: {errorText}
-            </div>
+          {errorText !== '' && (
+            <div className="mt-4 text-red-600">error: {errorText}</div>
           )}
         </div>
       }

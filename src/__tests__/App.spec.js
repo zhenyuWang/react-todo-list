@@ -7,12 +7,16 @@ it('render App', () => {
   expect(screen.getByText('My TodoList')).toBeInTheDocument()
   expect(screen.getByAltText('logo')).toBeInTheDocument()
 
-  expect(screen.getByText('Add').className).toBe('btn btn-success')
-  expect(screen.getByText('Delete Finished').className).toBe(
-    'btn btn-warning m-l-10'
+  expect(screen.getByText('Add').className).toBe(
+    'rounded bg-green-500 px-6 py-1 text-white focus:outline-none focus-visible:ring',
   )
-  expect(screen.getByText('Delete All').className).toBe('btn btn-danger m-l-10')
+  expect(screen.getByText('Delete Finished').className).toBe(
+    'ml-3 rounded bg-orange-500 px-3 py-1 text-white focus:outline-none focus-visible:ring',
+  )
+  expect(screen.getByText('Delete All').className).toBe(
+    'ml-3 rounded bg-red-500 px-3 py-1 text-white focus:outline-none focus-visible:ring',
+  )
   expect(screen.getByText('Finished All').className).toBe(
-    'btn btn-primary m-l-10'
+    'ml-3 w-32  rounded bg-sky-500 px-3 py-1 text-white focus:outline-none focus-visible:ring',
   )
 })

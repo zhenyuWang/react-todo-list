@@ -11,7 +11,9 @@ export async function addTodo(title, content) {
 }
 
 export function clearStorage() {
+  // eslint-disable-next-line no-undef
   localStorage.clear()
 }
 
-it('fix no test error', async () => {})
+// eslint-disable-next-line no-undef
+it('fix no test error', async () => null)

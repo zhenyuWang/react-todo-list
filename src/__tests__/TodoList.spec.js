@@ -12,7 +12,9 @@ describe('TodoList', () => {
     render(<App />)
 
     const btnAdd = screen.getByText('Add')
-    expect(btnAdd.className).toBe('btn btn-success')
+    expect(btnAdd.className).toBe(
+      'rounded bg-green-500 px-6 py-1 text-white focus:outline-none focus-visible:ring',
+    )
     await userEvent.click(btnAdd)
 
     const titleLabel = screen.getByText('title:')
@@ -29,10 +31,14 @@ describe('TodoList', () => {
     expect(contentInput).toBeInTheDocument()
 
     const btnCancel = screen.getByText('Cancel')
-    expect(btnCancel.className).toBe('btn btn-default')
+    expect(btnCancel.className).toBe(
+      'rounded  bg-slate-500 px-3 py-1 text-white focus:focus:outline-none focus-visible:ring',
+    )
 
     const btnConfirm = screen.getByText('Confirm')
-    expect(btnConfirm.className).toBe('btn btn-primary')
+    expect(btnConfirm.className).toBe(
+      'rounded  bg-sky-500 px-3 py-1 text-white focus:outline-none focus-visible:ring',
+    )
   })
 
   it('delete finished', async () => {

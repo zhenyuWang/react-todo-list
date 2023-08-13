@@ -2,7 +2,6 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
-import classes from './index.module.scss'
 
 type TypeTodo = {
   id: number
@@ -13,9 +12,7 @@ type TypeTodo = {
 }
 
 function TodoList() {
-  const storageTodoList = localStorage.getItem('todoList')
-  const initTodoList = storageTodoList ? JSON.parse(storageTodoList) : []
-  const [_todoList, setTodoList] = useState(initTodoList as TypeTodo[])
+  const [_todoList, setTodoList] = useState([] as TypeTodo[])
   const todoList: TypeTodo[] = useMemo(() => [..._todoList], [_todoList])
   const [isShowAddTodo, setShowAddTodo] = useState(false)
   const [showDeleteCheckedModal, setDeleteCheckedModal] = useState(false)
@@ -43,7 +40,9 @@ function TodoList() {
 
   function onChangeFinished(id: number, value: boolean) {
     const targetTodo = todoList.find((todo) => todo.id === id)
-    targetTodo!.finished = value
+    if (targetTodo !== undefined) {
+      targetTodo.finished = value
+    }
     setTodoList(todoList)
     finishedNum.current += value ? 1 : -1
     setIsAllFinished(finishedNum.current === todoList.length)
@@ -119,50 +118,50 @@ function TodoList() {
 
   return (
     <>
-      <div
-        className={`flex flex-justify-between flex-align-center ${classes['todo-list']}`}
-      >
-        <div className="flex flex-align-center">
+      <div className="mb-10 flex items-center justify-between px-5 py-4 shadow shadow-indigo-500/50">
+        <div className="flex items-center ">
           <img src="/logo.png" alt="logo" width="40" height="40" />
-          <h1 className="m-l-10">My TodoList</h1>
+          <h1 className="pl-4 text-2xl font-bold">My TodoList</h1>
         </div>
-        <div className="flex flex-align-center">
+        <div className="item-center flex">
           <button
             onClick={() => setShowAddTodo(true)}
-            className="btn btn-success"
+            className="rounded bg-green-500 px-6 py-1 text-white focus:outline-none focus-visible:ring"
           >
             Add
           </button>
           <button
             onClick={() => setDeleteCheckedModal(true)}
-            className="btn btn-warning m-l-10"
+            className="ml-3 rounded bg-orange-500 px-3 py-1 text-white focus:outline-none focus-visible:ring"
           >
             Delete Finished
           </button>
           <button
             onClick={() => setDeleteAllModal(true)}
-            className="btn btn-danger m-l-10"
+            className="ml-3 rounded bg-red-500 px-3 py-1 text-white focus:outline-none focus-visible:ring"
           >
             Delete All
           </button>
           <button
             onClick={switchAllFinished}
-            className="btn btn-primary m-l-10"
+            className="ml-3 w-32  rounded bg-sky-500 px-3 py-1 text-white focus:outline-none focus-visible:ring"
           >
             {isAllFinished ? 'All Unfinished' : 'Finished All'}
           </button>
         </div>
       </div>
-      {_todoList.map((todo) => (
-        <Todo
-          key={todo.id}
-          {...todo}
-          onChangeActive={onChangeActive}
-          onChangeFinished={onChangeFinished}
-          onEditTodo={onEditTodo}
-          onDeleteTodo={onDeleteTodo}
-        />
-      ))}
+      <div className="px-4">
+        {_todoList.map((todo) => (
+          <Todo
+            key={todo.id}
+            {...todo}
+            onChangeActive={onChangeActive}
+            onChangeFinished={onChangeFinished}
+            onEditTodo={onEditTodo}
+            onDeleteTodo={onDeleteTodo}
+          />
+        ))}
+      </div>
 
       {isShowAddTodo && (
         <AddTodo onAddTodo={onAddTodo} onClose={() => setShowAddTodo(false)} />

@@ -1,8 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import Modal from '../Modal'
 import { stopPropagation } from '../../utils'
-import indexClasses from './index.module.scss'
-import addClasses from './add.module.scss'
 
 function Todo({
   id,
@@ -37,7 +35,7 @@ function Todo({
   function onTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setEditTitle(e.target.value)
     editTitle = e.target.value
-    if (e.target.value && editContent) {
+    if (e.target.value !== '' && editContent !== '') {
       setErrorText('')
     }
   }
@@ -45,7 +43,7 @@ function Todo({
   function onContentInput(e: React.ChangeEvent<HTMLInputElement>) {
     setEditContent(e.target.value)
     editContent = e.target.value
-    if (editTitle && e.target.value) {
+    if (editTitle !== '' && e.target.value !== '') {
       setErrorText('')
     }
   }
@@ -58,10 +56,10 @@ function Todo({
     setShowEditModal(value)
   }
   function editTodo(e: React.MouseEvent<Element, MouseEvent>) {
-    if (!editTitle) {
+    if (editTitle === '') {
       return setErrorText('title is required!')
     }
-    if (!editContent) {
+    if (editContent === '') {
       return setErrorText('content is required!')
     }
     setEditModalState(e, false)
@@ -83,43 +81,43 @@ function Todo({
 
   return (
     <div
-      className={
-        finished
-          ? `${indexClasses.todo} ${indexClasses.finished} flex flex-justify-between flex-align-start`
-          : `${indexClasses.todo} flex flex-justify-between flex-align-start`
-      }
+      className="mb-4 flex justify-between rounded p-4 shadow shadow-blue-500/50"
       onClick={() => onChangeActive(id)}
       data-testid="todo"
     >
-      <div className="flex flex-align-start">
+      <div className="flex">
         <input
-          className={`${indexClasses.checkbox} m-t-10`}
+          className="checkbox mr-4 h-4 w-4 focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
           type="checkbox"
           onClick={stopPropagation}
           onChange={(e) => onChangeFinished(id, e.target.checked)}
           checked={finished}
         />
-        <div>
-          <h2 className={indexClasses.title}>{title}</h2>
-          <div>
-            {active && <p className={indexClasses.content}>{content}</p>}
-          </div>
+        <div className="-mt-2">
+          <h2 className={`text-2xl ${finished ? 'line-through' : ''}`}>
+            {title}
+          </h2>
+          {active && (
+            <p className={`mx-0 mt-4 ${finished ? 'line-through' : ''}`}>
+              {content}
+            </p>
+          )}
         </div>
       </div>
-      <div className="flex flex-align-center btn-box">
+      <div>
         <button
-          className="btn btn-primary"
+          className="rounded bg-green-500 px-6 py-1 text-white focus:outline-none focus-visible:ring"
           onClick={(e) => {
             setEditModalState(e, true)
             setTimeout(() => {
-              ;(inputTitleRef.current! as HTMLElement).focus()
+              ;(inputTitleRef.current as unknown as HTMLElement).focus()
             }, 0)
           }}
         >
           Edit
         </button>
         <button
-          className="btn btn-warning m-l-10"
+          className="ml-3 rounded bg-red-500 px-3 py-1 text-white focus:outline-none focus-visible:ring"
           onClick={(e) => setDeleteModalState(e, true)}
         >
           Delete
@@ -130,11 +128,13 @@ function Todo({
           onCancel={(e) => setEditModalState(e, false)}
           onConfirm={editTodo}
           content={
-            <div className={addClasses['add-todo-content']}>
-              <div className="flex flex-align-center">
-                <div className={`${addClasses.label} font-size-20`}>title:</div>
+            <div>
+              <div className="flex-align-center flex">
+                <div className="w-20 text-lg leading-8 text-slate-500">
+                  title:
+                </div>
                 <input
-                  className="font-size-18"
+                  className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
                   type="text"
                   ref={inputTitleRef}
                   value={_editTitle}
@@ -142,22 +142,20 @@ function Todo({
                   placeholder="Please enter title"
                 />
               </div>
-              <div className="flex flex-align-center m-t-10">
-                <div className={`${addClasses.label} font-size-20`}>
+              <div className="flex-align-center mt-4 flex">
+                <div className="w-20 text-lg leading-8 text-slate-500">
                   content:
                 </div>
                 <input
-                  className="font-size-18"
+                  className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
                   type="text"
                   value={_editContent}
                   onInput={onContentInput}
                   placeholder="Please enter content"
                 />
               </div>
-              {errorText && (
-                <div className={`m-t-10 ${addClasses['error-text']}`}>
-                  error: {errorText}
-                </div>
+              {errorText !== '' && (
+                <div className="mt-4">error: {errorText}</div>
               )}
             </div>
           }
