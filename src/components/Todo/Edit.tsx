@@ -1,23 +1,24 @@
-import { useState, useRef, useEffect, MouseEventHandler } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import Modal from '../Modal'
+import { stopPropagation } from '../../utils'
 
-function AddTodo({
-  onClose,
-  onAddTodo,
+function EditTodo({
+  id,
+  title,
+  content,
+  onEditTodo,
+  setShowEditModalState,
 }: {
-  onClose: MouseEventHandler
-  onAddTodo: ({
-    id,
-    title,
-    content,
-  }: {
-    id: number
-    title: string
-    content: string
-  }) => void
+  id: number
+  title: string
+  content: string
+  onEditTodo: (id: number, title: string, content: string) => void
+  setShowEditModalState: (value: boolean) => void
 }) {
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [_editTitle, setEditTitle] = useState(title)
+  let editTitle = useMemo(() => _editTitle, [_editTitle])
+  const [_editContent, setEditContent] = useState(content)
+  let editContent = useMemo(() => _editContent, [_editContent])
   const [errorText, setErrorText] = useState('')
   const titleInputRef = useRef(null)
   useEffect(() => {
@@ -25,37 +26,38 @@ function AddTodo({
   }, [])
 
   function onTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
-    setTitle(e.target.value)
-    if (e.target.value !== '' && content !== '') {
+    setEditTitle(e.target.value)
+    editTitle = e.target.value
+    if (e.target.value !== '' && editContent !== '') {
       setErrorText('')
     }
   }
 
   function onContentInput(e: React.ChangeEvent<HTMLInputElement>) {
-    setContent(e.target.value)
-    if (title !== '' && e.target.value !== '') {
+    setEditContent(e.target.value)
+    editContent = e.target.value
+    if (editTitle !== '' && e.target.value !== '') {
       setErrorText('')
     }
   }
 
-  function addTodo() {
-    if (title === '') {
+  function editTodo(e: React.MouseEvent<Element, MouseEvent>) {
+    stopPropagation(e)
+    if (editTitle === '') {
       return setErrorText('title is required!')
     }
-    if (content === '') {
+    if (editContent === '') {
       return setErrorText('content is required!')
     }
-    onAddTodo({
-      id: Date.now(),
-      title,
-      content,
-    })
+    setShowEditModalState(false)
+    ;(title !== editTitle || content !== editContent) &&
+      onEditTodo(id, editTitle, editContent)
   }
 
   return (
     <Modal
-      onCancel={onClose}
-      onConfirm={addTodo}
+      onCancel={(e) => (stopPropagation(e), setShowEditModalState(false))}
+      onConfirm={editTodo}
       content={
         <div>
           <div className="flex-align-center flex">
@@ -64,7 +66,7 @@ function AddTodo({
               className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
               type="text"
               ref={titleInputRef}
-              value={title}
+              value={_editTitle}
               onInput={onTitleInput}
               placeholder="Please enter title"
             />
@@ -76,18 +78,16 @@ function AddTodo({
             <input
               className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
               type="text"
-              value={content}
+              value={_editContent}
               onInput={onContentInput}
               placeholder="Please enter content"
             />
           </div>
-          {errorText !== '' && (
-            <div className="mt-4 text-red-600">error: {errorText}</div>
-          )}
+          {errorText !== '' && <div className="mt-4">error: {errorText}</div>}
         </div>
       }
     />
   )
 }
 
-export default AddTodo
+export default EditTodo

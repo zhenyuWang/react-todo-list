@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import Todo from '../Todo'
 import AddTodo from '../Todo/Add'
 import Modal from '../Modal'
+import EditTodo from '../Todo/Edit'
 
 type TypeTodo = {
   id: number
@@ -10,6 +11,8 @@ type TypeTodo = {
   finished: boolean
   active: boolean
 }
+let currentEditTodo: TypeTodo | null = null
+let currentDeleteTodoId = 0
 
 function TodoList() {
   const [_todoList, setTodoList] = useState([] as TypeTodo[])
@@ -23,6 +26,8 @@ function TodoList() {
   useEffect(() => {
     localStorage.setItem('todoList', JSON.stringify(todoList))
   }, [todoList])
+  const [showEditModalState, setShowEditModalState] = useState(false)
+  const [showDeleteModalState, setShowDeleteModalState] = useState(false)
 
   function switchAllFinished() {
     if (todoList.length === 0) {
@@ -71,6 +76,11 @@ function TodoList() {
     setIsAllFinished(false)
   }
 
+  function showEditModal(id: number) {
+    setShowEditModalState(true)
+    currentEditTodo = todoList.find((todo) => todo.id === id)!
+  }
+
   function onEditTodo(id: number, title: string, content: string) {
     const todo = todoList.find((todo) => todo.id === id)
     if (!todo) {
@@ -81,12 +91,18 @@ function TodoList() {
     setTodoList([...todoList])
   }
 
+  function showDeleteModal(id: number) {
+    currentDeleteTodoId = id
+    setShowDeleteModalState(true)
+  }
+
   function onDeleteTodo(id: number) {
     const targetIndex = todoList.findIndex((todo) => todo.id === id)
     finishedNum.current -= todoList[targetIndex].finished ? 1 : 0
     todoList.splice(targetIndex, 1)
     setTodoList(todoList)
     setIsAllFinished(finishedNum.current === todoList.length)
+    setShowDeleteModalState(false)
   }
 
   function onChangeActive(id: number) {
@@ -157,8 +173,8 @@ function TodoList() {
             {...todo}
             onChangeActive={onChangeActive}
             onChangeFinished={onChangeFinished}
-            onEditTodo={onEditTodo}
-            onDeleteTodo={onDeleteTodo}
+            showEditModal={showEditModal}
+            showDeleteModal={showDeleteModal}
           />
         ))}
       </div>
@@ -180,7 +196,25 @@ function TodoList() {
           onCancel={() => setDeleteAllModal(false)}
           onConfirm={onDeleteAll}
           msg="Are you sure you want to delete all?"
-        ></Modal>
+        />
+      )}
+
+      {showEditModalState && (
+        <EditTodo
+          id={currentEditTodo!.id}
+          title={currentEditTodo!.title}
+          content={currentEditTodo!.content}
+          onEditTodo={onEditTodo}
+          setShowEditModalState={setShowEditModalState}
+        />
+      )}
+
+      {showDeleteModalState && (
+        <Modal
+          onCancel={() => setShowDeleteModalState(false)}
+          msg="Are you sure you want to delete?"
+          onConfirm={() => onDeleteTodo(currentDeleteTodoId)}
+        />
       )}
     </>
   )
