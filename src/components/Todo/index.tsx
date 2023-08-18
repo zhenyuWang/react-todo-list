@@ -6,8 +6,8 @@ function Todo({
   title,
   content,
   active,
-  onChangeActive,
-  onChangeFinished,
+  changeActive,
+  changeFinished,
   showEditModal,
   showDeleteModal,
 }: {
@@ -16,10 +16,10 @@ function Todo({
   title: string
   content: string
   active: boolean
-  onChangeActive: (id: number) => void
+  changeActive: (id: number) => void
   showEditModal: (id: number) => void
   showDeleteModal: (id: number) => void
-  onChangeFinished: (id: number, value: boolean) => void
+  changeFinished: (id: number, value: boolean) => void
 }) {
   function _showEditModal(e: React.MouseEvent<Element, MouseEvent>) {
     stopPropagation(e)
@@ -34,7 +34,7 @@ function Todo({
   return (
     <div
       className="mb-4 flex justify-between rounded p-4 shadow shadow-blue-500/50"
-      onClick={() => onChangeActive(id)}
+      onClick={() => changeActive(id)}
       data-testid="todo"
     >
       <div className="flex">
@@ -42,7 +42,7 @@ function Todo({
           className="checkbox mr-4 h-4 w-4 focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
           type="checkbox"
           onClick={stopPropagation}
-          onChange={(e) => onChangeFinished(id, e.target.checked)}
+          onChange={(e) => changeFinished(id, e.target.checked)}
           checked={finished}
         />
         <div className="-mt-2">

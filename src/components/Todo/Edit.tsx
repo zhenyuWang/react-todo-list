@@ -1,24 +1,20 @@
-import { useMemo, useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Modal from '../Modal'
 import { stopPropagation } from '../../utils'
+import { TypeTodo } from '../../App'
 
 function EditTodo({
-  id,
-  title,
-  content,
-  onEditTodo,
+  currentEditTodo,
+  editTodo,
   setShowEditModalState,
 }: {
-  id: number
-  title: string
-  content: string
-  onEditTodo: (id: number, title: string, content: string) => void
+  currentEditTodo: TypeTodo
+  editTodo: (id: number, title: string, content: string) => void
   setShowEditModalState: (value: boolean) => void
 }) {
-  const [_editTitle, setEditTitle] = useState(title)
-  let editTitle = useMemo(() => _editTitle, [_editTitle])
-  const [_editContent, setEditContent] = useState(content)
-  let editContent = useMemo(() => _editContent, [_editContent])
+  const { id, title, content } = currentEditTodo
+  const [editTitle, setEditTitle] = useState(title)
+  const [editContent, setEditContent] = useState(content)
   const [errorText, setErrorText] = useState('')
   const titleInputRef = useRef(null)
   useEffect(() => {
@@ -27,7 +23,6 @@ function EditTodo({
 
   function onTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setEditTitle(e.target.value)
-    editTitle = e.target.value
     if (e.target.value !== '' && editContent !== '') {
       setErrorText('')
     }
@@ -35,13 +30,12 @@ function EditTodo({
 
   function onContentInput(e: React.ChangeEvent<HTMLInputElement>) {
     setEditContent(e.target.value)
-    editContent = e.target.value
     if (editTitle !== '' && e.target.value !== '') {
       setErrorText('')
     }
   }
 
-  function editTodo(e: React.MouseEvent<Element, MouseEvent>) {
+  function onEditTodo(e: React.MouseEvent<Element, MouseEvent>) {
     stopPropagation(e)
     if (editTitle === '') {
       return setErrorText('title is required!')
@@ -51,13 +45,13 @@ function EditTodo({
     }
     setShowEditModalState(false)
     ;(title !== editTitle || content !== editContent) &&
-      onEditTodo(id, editTitle, editContent)
+      editTodo(id, editTitle, editContent)
   }
 
   return (
     <Modal
       onCancel={(e) => (stopPropagation(e), setShowEditModalState(false))}
-      onConfirm={editTodo}
+      onConfirm={onEditTodo}
       content={
         <div>
           <div className="flex-align-center flex">
@@ -66,7 +60,7 @@ function EditTodo({
               className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
               type="text"
               ref={titleInputRef}
-              value={_editTitle}
+              value={editTitle}
               onInput={onTitleInput}
               placeholder="Please enter title"
             />
@@ -78,7 +72,7 @@ function EditTodo({
             <input
               className="h-8 w-72 rounded border border-slate-300 pl-2 text-base focus:border-none focus:border-sky-600 focus:outline-none focus-visible:ring"
               type="text"
-              value={_editContent}
+              value={editContent}
               onInput={onContentInput}
               placeholder="Please enter content"
             />

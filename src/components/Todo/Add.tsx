@@ -3,10 +3,10 @@ import Modal from '../Modal'
 
 function AddTodo({
   onClose,
-  onAddTodo,
+  addTodo,
 }: {
   onClose: MouseEventHandler
-  onAddTodo: ({
+  addTodo: ({
     id,
     title,
     content,
@@ -38,14 +38,14 @@ function AddTodo({
     }
   }
 
-  function addTodo() {
+  function onAddTodo() {
     if (title === '') {
       return setErrorText('title is required!')
     }
     if (content === '') {
       return setErrorText('content is required!')
     }
-    onAddTodo({
+    addTodo({
       id: Date.now(),
       title,
       content,
@@ -55,7 +55,7 @@ function AddTodo({
   return (
     <Modal
       onCancel={onClose}
-      onConfirm={addTodo}
+      onConfirm={onAddTodo}
       content={
         <div>
           <div className="flex-align-center flex">
