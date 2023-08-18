@@ -15,7 +15,7 @@ function Header({
     <header className="mb-10 flex items-center justify-between px-5 py-4 shadow shadow-indigo-500/50">
       <div className="flex items-center ">
         <img src="/logo.png" alt="logo" width="40" height="40" />
-        <h1 className="pl-4 text-2xl font-bold">My TodoList</h1>
+        <h1 className="pl-4 text-2xl font-bold">TodoList</h1>
       </div>
       <div className="item-center flex">
         <button

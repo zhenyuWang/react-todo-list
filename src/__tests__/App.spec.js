@@ -4,7 +4,7 @@ import App from '../App'
 it('render App', () => {
   render(<App />)
 
-  expect(screen.getByText('My TodoList')).toBeInTheDocument()
+  expect(screen.getByText('TodoList')).toBeInTheDocument()
   expect(screen.getByAltText('logo')).toBeInTheDocument()
 
   expect(screen.getByText('Add').className).toBe(
